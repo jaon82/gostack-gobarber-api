@@ -3,6 +3,7 @@ import multer from 'multer';
 import uploadConfig from '../config/upload';
 
 import CreateUserService from '../services/CreateUserService';
+import UpdateUserAvatarService from '../services/UpdateUserAvatarService';
 
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
@@ -21,9 +22,15 @@ usersRouter.post('/', async (request, response) => {
       password,
     });
 
-    delete user.password;
+    const userWithoutPassword = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    };
 
-    return response.json(user);
+    return response.json(userWithoutPassword);
   } catch (err) {
     return response.status(400).json({ error: err.message });
   }
@@ -34,7 +41,27 @@ usersRouter.patch(
   ensureAuthenticated,
   upload.single('avatar'),
   async (request, response) => {
-    return response.json({ ok: true });
+    try {
+      const updateUserAvatarService = new UpdateUserAvatarService();
+
+      const user = await updateUserAvatarService.execute({
+        userId: request.user.id,
+        avatarFilename: request.file.filename,
+      });
+
+      const userWithoutPassword = {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        avatar: user.avatar,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+      };
+
+      return response.json(userWithoutPassword);
+    } catch (err) {
+      return response.status(400).json({ error: err.message });
+    }
   },
 );
 
