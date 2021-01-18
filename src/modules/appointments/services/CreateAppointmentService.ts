@@ -3,7 +3,7 @@ import { startOfHour } from 'date-fns';
 import AppError from '@shared/errors/AppError';
 
 import Appointment from '../infra/typeorm/entities/Appointment';
-import AppointmentsRepository from '../infra/typeorm/repositories/AppointmentsRepository';
+import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
 
 interface IRequest {
   date: Date;
@@ -11,12 +11,12 @@ interface IRequest {
 }
 
 class CreateAppointmentService {
-  public async execute({ date, providerId }: IRequest): Promise<Appointment> {
-    const appointmentsRepository = new AppointmentsRepository();
+  constructor(private appointmentsRepository: IAppointmentsRepository) {}
 
+  public async execute({ date, providerId }: IRequest): Promise<Appointment> {
     const appointmentDate = startOfHour(date);
 
-    const findAppointmentInSameDate = await appointmentsRepository.findByDate(
+    const findAppointmentInSameDate = await this.appointmentsRepository.findByDate(
       appointmentDate,
     );
 
@@ -24,7 +24,7 @@ class CreateAppointmentService {
       throw new AppError('This appointment is already booked');
     }
 
-    const appointment = await appointmentsRepository.create({
+    const appointment = await this.appointmentsRepository.create({
       providerId,
       date: appointmentDate,
     });
