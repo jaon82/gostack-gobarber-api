@@ -11,3 +11,4 @@ dist
 tmp/*
 !tmp/.gitkeep
 /.project
+coverage
