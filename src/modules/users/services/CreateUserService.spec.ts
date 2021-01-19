@@ -6,9 +6,9 @@ import CreateUserService from './CreateUserService';
 describe('CreateUser', () => {
   it('should be able to create a new user', async () => {
     const fakeUsersRepository = new FakeUsersRepository();
-    const createUser = new CreateUserService(fakeUsersRepository);
+    const createUserService = new CreateUserService(fakeUsersRepository);
 
-    const user = await createUser.execute({
+    const user = await createUserService.execute({
       name: 'John Doe',
       email: 'johndoe@example.com',
       password: '123123',
@@ -19,16 +19,16 @@ describe('CreateUser', () => {
 
   it('should not be able to create a new user with email from another', async () => {
     const fakeUsersRepository = new FakeUsersRepository();
-    const createUser = new CreateUserService(fakeUsersRepository);
+    const createUserService = new CreateUserService(fakeUsersRepository);
 
-    await createUser.execute({
+    await createUserService.execute({
       name: 'John Doe',
       email: 'johndoe@example.com',
       password: '123123',
     });
 
     expect(
-      createUser.execute({
+      createUserService.execute({
         name: 'John Doe',
         email: 'johndoe@example.com',
         password: '123123',

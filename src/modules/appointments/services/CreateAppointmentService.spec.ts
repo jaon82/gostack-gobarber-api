@@ -8,19 +8,19 @@ import CreateAppointmentService from './CreateAppointmentService';
 describe('CreateAppointment', () => {
   it('should not be able to create two appointments on the same time', async () => {
     const fakeAppointmentsRepository = new FakeAppointmentsRepository();
-    const createAppointment = new CreateAppointmentService(
+    const createAppointmentService = new CreateAppointmentService(
       fakeAppointmentsRepository,
     );
 
     const appointmentDate = new Date();
 
-    await createAppointment.execute({
+    await createAppointmentService.execute({
       date: appointmentDate,
       providerId: '123123',
     });
 
     expect(
-      createAppointment.execute({
+      createAppointmentService.execute({
         date: appointmentDate,
         providerId: '123123',
       }),
