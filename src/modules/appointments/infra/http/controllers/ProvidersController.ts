@@ -7,9 +7,9 @@ export default class ProvidersController {
   public async index(request: Request, response: Response): Promise<Response> {
     const userId = request.user.id;
 
-    const listProviders = container.resolve(ListProvidersService);
+    const listProvidersService = container.resolve(ListProvidersService);
 
-    const providers = await listProviders.execute({
+    const providers = await listProvidersService.execute({
       userId,
     });
 
