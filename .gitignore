@@ -6,6 +6,8 @@ temp
 .env
 coverage
 ormconfig.json
+ormconfig.build.json
+ormconfig.dev.json
 dist
 
 tmp/*
