@@ -14,8 +14,8 @@ export default {
 
   defaults: {
     from: {
-      email: 'seu@email.com',
-      name: 'Seu Nome',
+      email: process.env.MAIL_SENDER_MAIL,
+      name: process.env.MAIL_SENDER_NAME,
     },
   },
 } as IMailConfig;
