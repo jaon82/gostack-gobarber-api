@@ -52,7 +52,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd ${{ secrets.DEPLOY_DIR }} 
-            yarn typeorm migration:run
+            ./node_modules/.bin/typeorm migration:run
             
       - name: Restart service
         uses: appleboy/ssh-action@master
