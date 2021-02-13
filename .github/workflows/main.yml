@@ -32,7 +32,7 @@ jobs:
           source: ".,!node_modules"
           target: ${{ secrets.DEPLOY_DIR }}
 
-      - name: Install dependencies on host
+      - name: Run production scripts
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -42,23 +42,5 @@ jobs:
           script: |
             cd ${{ secrets.DEPLOY_DIR }} 
             yarn
-
-      - name: Run migrations
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          port: ${{ secrets.SSH_PORT }}
-          key: ${{ secrets.SSH_KEY }}
-          script: |
-            cd ${{ secrets.DEPLOY_DIR }} 
-            ./node_modules/.bin/typeorm migration:run
-            
-      - name: Restart service
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          port: ${{ secrets.SSH_PORT }}
-          key: ${{ secrets.SSH_KEY }}
-          script: pm2 restart ${{ secrets.PM2_SERVICE }}
+            yarn typeorm migration:run
+            pm2 restart ${{ secrets.PM2_SERVICE }}
